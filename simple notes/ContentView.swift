@@ -6,19 +6,44 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
+    
+    @AppStorage("MyTabViewCustomization")
+    private var customization: TabViewCustomization
+    
+    @Query var notes: [Note]
+    
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        
+        TabView {
+            
+            Tab("Notes", systemImage: "note") {
+                notesView()
+            }
+            .customizationID("1")
+            
+            Tab(role: .search) {
+                searchNotesView()
+            }
+            
+            .sectionActions {
+                Button("Button 1") {
+                    
+                }
+                Button("Button 2") {
+                    
+                }
+            }
         }
-        .padding()
+        .tabViewStyle(.sidebarAdaptable)
+        .tabViewCustomization($customization)
     }
 }
 
 #Preview {
     ContentView()
+        
 }
