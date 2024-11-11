@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import UserNotifications
 
 struct ContentView: View {
     
@@ -28,7 +29,6 @@ struct ContentView: View {
             Tab(role: .search) {
                 searchNotesView()
             }
-            
             .sectionActions {
                 Button("Button 1") {
                     

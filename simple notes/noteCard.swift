@@ -18,7 +18,7 @@ struct noteCard: View {
                 HStack {
                     Text(note.title)
                         .font(.title)
-                        .foregroundStyle(.black)
+                        .foregroundStyle(.primary)
                     Spacer()
                     Image(systemName: note.favorite ? "bookmark.fill" : "bookmark")
                 }

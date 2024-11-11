@@ -78,7 +78,6 @@ struct notesView: View {
                     })
                     .sheet(isPresented: $showSheet) {
                         addNoteView()
-                            .presentationDetents([.height(450)])
                     }
                 }
                 ToolbarItem(placement: .topBarLeading) {
