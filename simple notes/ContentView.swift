@@ -30,14 +30,6 @@ struct ContentView: View {
             Tab(role: .search) {
                 searchNotesView()
             }
-            .sectionActions {
-                Button("Button 1") {
-                    
-                }
-                Button("Button 2") {
-                    
-                }
-            }
         }
         .tabViewStyle(.sidebarAdaptable)
         .tabViewCustomization($customization)
