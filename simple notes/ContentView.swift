@@ -25,6 +25,7 @@ struct ContentView: View {
                 notesView()
             }
             .customizationID("1")
+            .badge(notes.count)
             
             Tab(role: .search) {
                 searchNotesView()

@@ -36,3 +36,6 @@ func requestNotificationPermission() {
     }
 }
 
+func removeNotification(id: String) {
+    UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: [id])
+}

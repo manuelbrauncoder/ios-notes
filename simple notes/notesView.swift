@@ -40,6 +40,9 @@ struct notesView: View {
                     .swipeActions(edge: .trailing, allowsFullSwipe: true) {
                         
                         Button(role: .destructive, action: {
+                            if note.notificationID != nil {
+                                removeNotification(id: note.notificationID!)
+                            }
                             modelContext.delete(note)
                         }, label: {
                             Label("Delete", systemImage: "trash.fill")
