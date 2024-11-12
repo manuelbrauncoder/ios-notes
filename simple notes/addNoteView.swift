@@ -10,17 +10,18 @@ import SwiftUI
 import SwiftData
 import PhotosUI
 
-
 struct addNoteView: View {
     
     @State private var title = ""
     @State private var note_text = ""
     @State private var reminderDate = Date.now
     @State private var setReminder = false
-    @State private var showPhotoPicker = false
     
-    @State private var img: Image?
-    @State private var imgData: Data?
+    @State private var selectedImage: UIImage? // for showing preview
+    @State private var imgData: Data? // for saving in swift data
+    @State private var imgItem: PhotosPickerItem?
+    
+    @FocusState var inputActive: Bool
     
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
@@ -48,13 +49,25 @@ struct addNoteView: View {
                     Text("Title:")
                     TextField("", text: $title)
                         .foregroundStyle(.secondary)
+                        .focused($inputActive)
+                        .toolbar {
+                            ToolbarItemGroup(placement: .keyboard) {
+                                Spacer()
+                                Button("Done") {
+                                    inputActive = false
+                                }
+                            }
+                        }
+                        
                         
                 }
+                
                 Section {
                     Text("Note:")
                     TextEditor(text: $note_text)
                         .foregroundStyle(.secondary)
                         .frame(minHeight: 150)
+                        .focused($inputActive)
                 }
                 Section {
                     Toggle("Reminder?", isOn: $setReminder)
@@ -67,21 +80,16 @@ struct addNoteView: View {
                 }
                 
                 Section {
-                    Button {
-                        showPhotoPicker = true
-                    } label: {
-                        HStack {
-                            Text("Add Photo")
-                            Image(systemName: "camera")
-                        }
+                    
+                    photoPickerView(imgData: $imgData, selectedImage: $selectedImage)
+                    openCameraButton(selectedImage: $selectedImage, imgData: $imgData)
+                    
+                    if let selectedImage {
+                        Image(uiImage: selectedImage)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 100, height: 100)
                     }
-                    .sheet(isPresented: $showPhotoPicker){
-                        photoPickerView(img: $img, imgData: $imgData)
-                    }
-                    img?
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 100, height: 100)
                 }
             }
             .navigationBarTitle("Add Note")

@@ -18,6 +18,7 @@ struct noteDetailView: View {
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) private var dismiss
     @State private var img: Image?
+    @FocusState var inputActive: Bool
     
     
     /// if there is an image in the Note,
@@ -57,10 +58,20 @@ struct noteDetailView: View {
                     Text("Title:")
                     TextField(note.title, text: $note.title)
                         .foregroundStyle(.secondary)
+                        .focused($inputActive)
+                        .toolbar {
+                            ToolbarItemGroup(placement: .keyboard) {
+                                Spacer()
+                                Button("Done") {
+                                    inputActive = false
+                                }
+                            }
+                        }
                     Text("Note:")
                     TextEditor(text: $note.note_text)
                         .foregroundStyle(.secondary)
                         .frame(minHeight: 150)
+                        .focused($inputActive)
                 }
             } else {
                 Section {
