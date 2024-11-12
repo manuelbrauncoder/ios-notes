@@ -6,8 +6,13 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		64A7D90C2CE35B6500080A7A /* photoPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64A7D90B2CE35B6500080A7A /* photoPickerView.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		642B0DA32CDF6C04008B150E /* simple notes.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "simple notes.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		64A7D90B2CE35B6500080A7A /* photoPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = photoPickerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -32,6 +37,7 @@
 		642B0D9A2CDF6C04008B150E = {
 			isa = PBXGroup;
 			children = (
+				64A7D90B2CE35B6500080A7A /* photoPickerView.swift */,
 				642B0DA52CDF6C04008B150E /* simple notes */,
 				642B0DA42CDF6C04008B150E /* Products */,
 			);
@@ -119,6 +125,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				64A7D90C2CE35B6500080A7A /* photoPickerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

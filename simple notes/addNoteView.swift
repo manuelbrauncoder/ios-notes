@@ -8,6 +8,7 @@
 import Foundation
 import SwiftUI
 import SwiftData
+import PhotosUI
 
 
 struct addNoteView: View {
@@ -16,6 +17,10 @@ struct addNoteView: View {
     @State private var note_text = ""
     @State private var reminderDate = Date.now
     @State private var setReminder = false
+    @State private var showPhotoPicker = false
+    
+    @State private var img: Image?
+    @State private var imgData: Data?
     
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) var dismiss
@@ -24,11 +29,11 @@ struct addNoteView: View {
         if setReminder {
             let id = UUID().uuidString
             scheduleNotification(reminderDate: reminderDate, reminderID: id, title: title, body: note_text)
-            let newNote = Note(title: title, note_text: note_text, created_at: Date(), favorite: false, notificationID: id, reminder: reminderDate)
+            let newNote = Note(title: title, note_text: note_text, created_at: Date(), favorite: false, notificationID: id, reminder: reminderDate, imgData: imgData)
             modelContext.insert(newNote)
             dismiss()
         } else {
-            let newNote = Note(title: title, note_text: note_text, created_at: Date(), favorite: false)
+            let newNote = Note(title: title, note_text: note_text, created_at: Date(), favorite: false, imgData: imgData)
             modelContext.insert(newNote)
             dismiss()
         }
@@ -59,6 +64,24 @@ struct addNoteView: View {
                     if setReminder {
                         DatePicker("Date", selection: $reminderDate)
                     }
+                }
+                
+                Section {
+                    Button {
+                        showPhotoPicker = true
+                    } label: {
+                        HStack {
+                            Text("Add Photo")
+                            Image(systemName: "camera")
+                        }
+                    }
+                    .sheet(isPresented: $showPhotoPicker){
+                        photoPickerView(img: $img, imgData: $imgData)
+                    }
+                    img?
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 100, height: 100)
                 }
             }
             .navigationBarTitle("Add Note")
