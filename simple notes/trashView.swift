@@ -20,41 +20,27 @@ struct trashView: View {
     }) var notes: [Note]
     
     @Environment(\.modelContext) var modelContext
-    @State private var showDeleteAlert = false
     
     var body: some View {
         NavigationStack {
             List {
                 ForEach(notes) { note in
-                    
-                    Section {
-                        Text(note.title)
-                            .font(.title3)
-                        Text(truncatedText(note.note_text, limit: 30))
-                            .foregroundStyle(.secondary)
-                        
-                        Button {
-                            note.trashNote = false
-                        } label: {
-                            Label("Restore", systemImage: "arrow.2.circlepath.circle")
-                        }
-                        
-                        Button {
-                            showDeleteAlert = true
-                        } label: {
-                            Label("Delete", systemImage: "trash")
-                        }
-                        .alert("Delete Note permanently?", isPresented: $showDeleteAlert) {
-                            Button("Delete", role: .destructive) {
+                    noteCardTrash(note: note)
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            Button(role: .destructive, action: {
                                 modelContext.delete(note)
+                            }) {
+                                Label("Delete", systemImage: "trash")
                             }
-                            Button("Cancel", role: .cancel){
-                                showDeleteAlert = false
+                            
+                        }
+                        .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                            Button(action: {
+                                note.trashNote = false
+                            }) {
+                                Label("Restore", systemImage: "arrow.2.circlepath.circle")
                             }
                         }
-                    }
-                    
-                        
                 }
             }
             .overlay {

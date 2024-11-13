@@ -18,8 +18,6 @@ struct ContentView: View {
     @Query var notes: [Note]
     
     
-    
-    
     /// Count the notes
     /// - Parameter countTrash: true for trash, false for normal note
     /// - Returns: the number of notes

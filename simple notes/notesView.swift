@@ -25,6 +25,13 @@ struct notesView: View {
     @State private var sortByTitle = false
     @State private var searchTerm = ""
     
+    private func moveToTrash(note: Note) {
+        if note.notificationID != nil {
+            removeNotification(id: note.notificationID!)
+        }
+        note.trashNote = true
+    }
+    
     private var filteredNotes: [Note] {
            var result = notes
            if showOnlyFavs {
@@ -46,10 +53,7 @@ struct notesView: View {
                     .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                         
                         Button(role: .destructive, action: {
-                            if note.notificationID != nil {
-                                removeNotification(id: note.notificationID!)
-                            }
-                            note.trashNote = true
+                            moveToTrash(note: note)
                         }, label: {
                             Label("Delete", systemImage: "trash.fill")
                         })
