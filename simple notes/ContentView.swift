@@ -18,6 +18,18 @@ struct ContentView: View {
     @Query var notes: [Note]
     
     
+    /// Count the notes with trashNote = false
+    /// - Returns: the number of the notes
+    private func countNotes(countTrash: Bool) -> Int {
+        var counter = 0
+        notes.forEach { note in
+            if note.trashNote == countTrash {
+                counter += 1
+            }
+        }
+        return counter
+    }
+    
     var body: some View {
         
         TabView {
@@ -26,7 +38,7 @@ struct ContentView: View {
                 notesView()
             }
             .customizationID("1")
-            .badge(notes.count)
+            .badge(countNotes(countTrash: false))
             
             Tab(role: .search) {
                 searchNotesView()
@@ -34,9 +46,10 @@ struct ContentView: View {
             .customizationID("2")
             
             Tab("Trash", systemImage: "trash") {
-                Text("Trash View coming soon")
+                trashView()
             }
             .customizationID("3")
+            .badge(countNotes(countTrash: true))
             
             Tab("More", systemImage: "ellipsis") {
                 moreView()

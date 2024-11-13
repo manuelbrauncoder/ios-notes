@@ -16,7 +16,9 @@ import SwiftData
 
 struct notesView: View {
     
-    @Query var notes: [Note]
+    @Query(filter: #Predicate<Note> { note in
+        note.trashNote == false
+    }) var notes: [Note]
     @Environment(\.modelContext) var modelContext
     @State private var showSheet = false
     @State private var showOnlyFavs = false
@@ -47,7 +49,7 @@ struct notesView: View {
                             if note.notificationID != nil {
                                 removeNotification(id: note.notificationID!)
                             }
-                            modelContext.delete(note)
+                            note.trashNote = true
                         }, label: {
                             Label("Delete", systemImage: "trash.fill")
                         })
@@ -68,7 +70,7 @@ struct notesView: View {
             .overlay {
                 if notes.isEmpty {
                     ContentUnavailableView {
-                        Label("No Notes added", systemImage: "")
+                        Label("No Notes added", systemImage: "note")
                     } description: {
                         Text("Press the plus to add a new note")
                     }

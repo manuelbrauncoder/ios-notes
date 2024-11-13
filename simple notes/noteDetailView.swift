@@ -48,7 +48,8 @@ struct noteDetailView: View {
     /// go back
     private func deleteNote() {
         deleteReminder()
-        modelContext.delete(note)
+        //modelContext.delete(note)
+        note.trashNote = true
         dismiss()
     }
    
@@ -127,10 +128,10 @@ struct noteDetailView: View {
             }
             
             Section {
-                Button("Delete Note", role: .destructive) {
+                Button("Move to Trash", role: .destructive) {
                     alertDeleteNote = true
                 }
-                .alert("Delete Note?", isPresented: $alertDeleteNote) {
+                .alert("Move to Trash?", isPresented: $alertDeleteNote) {
                     Button("Delete", role: .destructive) {
                         deleteNote()
                     }
