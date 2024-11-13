@@ -20,6 +20,7 @@ struct trashView: View {
     }) var notes: [Note]
     
     @Environment(\.modelContext) var modelContext
+    @State private var showDeleteAlert = false
     
     var body: some View {
         NavigationStack {
@@ -39,9 +40,17 @@ struct trashView: View {
                         }
                         
                         Button {
-                            modelContext.delete(note)
+                            showDeleteAlert = true
                         } label: {
                             Label("Delete", systemImage: "trash")
+                        }
+                        .alert("Delete Note permanently?", isPresented: $showDeleteAlert) {
+                            Button("Delete", role: .destructive) {
+                                modelContext.delete(note)
+                            }
+                            Button("Cancel", role: .cancel){
+                                showDeleteAlert = false
+                            }
                         }
                     }
                     

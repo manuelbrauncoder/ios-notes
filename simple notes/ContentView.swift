@@ -18,8 +18,11 @@ struct ContentView: View {
     @Query var notes: [Note]
     
     
-    /// Count the notes with trashNote = false
-    /// - Returns: the number of the notes
+    
+    
+    /// Count the notes
+    /// - Parameter countTrash: true for trash, false for normal note
+    /// - Returns: the number of notes
     private func countNotes(countTrash: Bool) -> Int {
         var counter = 0
         notes.forEach { note in
