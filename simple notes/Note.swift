@@ -4,6 +4,8 @@
 //
 //  Created by Manuel Braun on 09.11.24.
 //
+// The model for the Note
+// stored in swift data
 
 import Foundation
 import SwiftData

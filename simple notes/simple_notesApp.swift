@@ -9,10 +9,15 @@ import SwiftUI
 
 @main
 struct simple_notesApp: App {
+    
+    @AppStorage("selectedTheme") private var selectedTheme: Theme = .system
+
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .modelContainer(for: [Note.self])
+                .preferredColorScheme(selectedTheme.colorScheme)
         }
     }
 }

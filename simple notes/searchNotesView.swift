@@ -4,6 +4,7 @@
 //
 //  Created by Manuel Braun on 10.11.24.
 //
+// The search Tab in Tab View
 
 import Foundation
 import SwiftUI

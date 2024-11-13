@@ -4,6 +4,7 @@
 //
 //  Created by Manuel Braun on 09.11.24.
 //
+// noteDetailView
 
 import Foundation
 import SwiftUI

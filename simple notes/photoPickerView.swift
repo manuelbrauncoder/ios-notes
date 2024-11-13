@@ -4,6 +4,7 @@
 //
 //  Created by Manuel Braun on 12.11.24.
 //
+// This file is for the PhotoPicker
 
 import Foundation
 import SwiftUI

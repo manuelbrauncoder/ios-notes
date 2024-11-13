@@ -4,6 +4,7 @@
 //
 //  Created by Manuel Braun on 09.11.24.
 //
+// The root view of the App
 
 import SwiftUI
 import SwiftData
@@ -30,6 +31,20 @@ struct ContentView: View {
             Tab(role: .search) {
                 searchNotesView()
             }
+            .customizationID("2")
+            
+            Tab("Trash", systemImage: "trash") {
+                Text("Trash View coming soon")
+            }
+            .customizationID("3")
+            
+            Tab("More", systemImage: "ellipsis") {
+                moreView()
+            }
+            .customizationID("4")
+            
+           
+            
         }
         .tabViewStyle(.sidebarAdaptable)
         .tabViewCustomization($customization)
@@ -38,5 +53,5 @@ struct ContentView: View {
 
 #Preview {
     ContentView()
-        
+    
 }

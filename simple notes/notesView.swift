@@ -4,6 +4,10 @@
 //
 //  Created by Manuel Braun on 09.11.24.
 //
+// the list with all notes, showing
+// the noteCard of each note
+//
+// The notes Tab in Tab View
 
 import Foundation
 import SwiftUI
@@ -37,7 +41,7 @@ struct notesView: View {
                     NavigationLink(value: note) {
                         noteCard(note: note)
                     }
-                    .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                         
                         Button(role: .destructive, action: {
                             if note.notificationID != nil {
@@ -48,11 +52,11 @@ struct notesView: View {
                             Label("Delete", systemImage: "trash.fill")
                         })
                     }
-                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                         Button(action: {
                             note.favorite.toggle()
                         }) {
-                            Label("Toggle Bookmark", systemImage: "bookmark.fill")
+                            Label("Favorite", systemImage: "bookmark.fill")
                         }
                     }
                 }

@@ -4,6 +4,7 @@
 //
 //  Created by Manuel Braun on 10.11.24.
 //
+// this is the single note in notesView
 
 import Foundation
 import SwiftUI

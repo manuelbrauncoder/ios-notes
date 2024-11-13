@@ -4,6 +4,7 @@
 //
 //  Created by Manuel Braun on 09.11.24.
 //
+// This View is for adding new notes
 
 import Foundation
 import SwiftUI
@@ -58,9 +59,7 @@ struct addNoteView: View {
                                 }
                             }
                         }
-                        
-                        
-                }
+                    }
                 
                 Section {
                     Text("Note:")

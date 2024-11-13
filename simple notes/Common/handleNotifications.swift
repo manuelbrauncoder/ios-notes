@@ -4,6 +4,8 @@
 //
 //  Created by Manuel Braun on 11.11.24.
 //
+// This file is for functions that handles
+// everything about notifications
 
 import Foundation
 import SwiftUI

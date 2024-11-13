@@ -4,6 +4,8 @@
 //
 //  Created by Manuel Braun on 10.11.24.
 //
+// This file handles the filter menu
+// currently ists calles in notesView
 
 import Foundation
 import SwiftUI

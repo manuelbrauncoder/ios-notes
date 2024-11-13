@@ -4,6 +4,7 @@
 //
 //  Created by Manuel Braun on 12.11.24.
 //
+// The button to open the Camera View
 
 import Foundation
 import SwiftUI
