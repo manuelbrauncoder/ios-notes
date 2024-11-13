@@ -20,9 +20,9 @@ struct searchNotesView: View {
         if searchTerm.isEmpty {
             return []
         } else {
-          return notes.filter { note in
-                note.title.lowercased().contains(searchTerm.lowercased()) ||
-              note.note_text.lowercased().contains(searchTerm.lowercased())
+            return notes.filter { note in
+                note.trashNote == false && ( note.title.lowercased().contains(searchTerm.lowercased()) ||
+                                             note.note_text.lowercased().contains(searchTerm.lowercased()))
             }
         }
     }
