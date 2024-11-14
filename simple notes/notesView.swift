@@ -13,63 +13,37 @@ import Foundation
 import SwiftUI
 import SwiftData
 
-
 struct notesView: View {
     
     @Query(filter: #Predicate<Note> { note in
         note.trashNote == false
     }) var notes: [Note]
+    
+    @Query var folders: [Folder]
+    
     @Environment(\.modelContext) var modelContext
-    @State private var showSheet = false
+    
+    @State private var showAddNoteSheet = false
+    @State private var showAddFolderSheet = false
     @State private var showOnlyFavs = false
     @State private var sortByTitle = false
     @State private var searchTerm = ""
     
-    private func moveToTrash(note: Note) {
-        if note.notificationID != nil {
-            removeNotification(id: note.notificationID!)
-        }
-        note.trashNote = true
-    }
-    
-    private var filteredNotes: [Note] {
-           var result = notes
-           if showOnlyFavs {
-               result = result.filter { $0.favorite }
-           }
-           if sortByTitle {
-               result = result.sorted { $0.title < $1.title }
-           }
-           return result
-       }
-    
     var body: some View {
         NavigationStack {
             List {
-                ForEach(filteredNotes) { note in
-                    NavigationLink(value: note) {
-                        noteCard(note: note)
-                    }
-                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                        
-                        Button(role: .destructive, action: {
-                            moveToTrash(note: note)
-                        }, label: {
-                            Label("Delete", systemImage: "trash.fill")
-                        })
-                    }
-                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
-                        Button(action: {
-                            note.favorite.toggle()
-                        }) {
-                            Label("Favorite", systemImage: "bookmark.fill")
+                Section {
+                    ForEach(folders) { folder in
+                        NavigationLink(destination: folderDetailView(folder: folder)) {
+                            HStack {
+                                Image(systemName: "folder")
+                                Text(folder.name)
+                            }
+                            .padding(5)
                         }
                     }
                 }
-            }
-            .navigationDestination(for: Note.self) {
-                note in
-                noteDetailView(note: note)
+                notesList(showOnlyFavs: $showOnlyFavs, sortByTitle: $sortByTitle)
             }
             .overlay {
                 if notes.isEmpty {
@@ -82,21 +56,29 @@ struct notesView: View {
             }
             .navigationTitle("Notes")
             .toolbar {
-                
                 ToolbarItem(placement: .topBarTrailing) {
                     Button(action: {
-                        showSheet = true
+                        showAddNoteSheet = true
                     }, label: {
-                        Image(systemName: "plus")
+                        Image(systemName: "square.and.pencil")
                     })
-                    .sheet(isPresented: $showSheet) {
+                    .sheet(isPresented: $showAddNoteSheet) {
                         addNoteView()
+                    }
+                }
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button(action: {
+                        showAddFolderSheet = true
+                    }, label: {
+                        Image(systemName: "folder.badge.plus")
+                    })
+                    .sheet(isPresented: $showAddFolderSheet) {
+                        addFolderView()
                     }
                 }
                 ToolbarItem(placement: .topBarLeading) {
                     filterMenu(showOnlyFavs: $showOnlyFavs, sortByTitle: $sortByTitle)
                 }
-                
             }
         }
     }
@@ -104,5 +86,5 @@ struct notesView: View {
 
 #Preview {
     notesView()
-        .modelContainer(for: [Note.self], inMemory: true)
+        .modelContainer(for: [Note.self, Folder.self], inMemory: true)
 }

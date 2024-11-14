@@ -8,17 +8,22 @@
 
 import Foundation
 import SwiftUI
-
+import SwiftData
 
 struct noteDetailView: View {
     
+    @Query var folders: [Folder]
     @Bindable var note: Note
+    
     @State private var editNote = false
     @State private var alertRemoveReminder = false
     @State private var alertDeleteNote = false
+    @State private var img: Image?
+    @State private var selectedFolderName: String? = nil
+    
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) private var dismiss
-    @State private var img: Image?
+    
     @FocusState var inputActive: Bool
     
     
@@ -48,11 +53,31 @@ struct noteDetailView: View {
     /// go back
     private func deleteNote() {
         deleteReminder()
-        //modelContext.delete(note)
         note.trashNote = true
         dismiss()
     }
-   
+    
+    /// if selectedFolderName is not an empty string:
+    /// find the folder with selectedFolderName,
+    /// push note into Folder
+    /// push Folder into Note.folder
+    /// save modelContext
+    private func handleFolderSelection() {
+        if selectedFolderName == "" {
+            return
+        } else {
+            if let folder = folders.first(where: { $0.name == selectedFolderName }) {
+                folder.notes?.append(note)
+                note.folder = folder
+                do {
+                    try modelContext.save()
+                } catch {
+                    print("Error saving context: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
     var body: some View {
         Form {
             if editNote {
@@ -61,14 +86,7 @@ struct noteDetailView: View {
                     TextField(note.title, text: $note.title)
                         .foregroundStyle(.secondary)
                         .focused($inputActive)
-                        .toolbar {
-                            ToolbarItemGroup(placement: .keyboard) {
-                                Spacer()
-                                Button("Done") {
-                                    inputActive = false
-                                }
-                            }
-                        }
+                    
                     Text("Note:")
                     TextEditor(text: $note.note_text)
                         .foregroundStyle(.secondary)
@@ -82,25 +100,24 @@ struct noteDetailView: View {
                     Text(note.note_text)
                 }
             }
-            
-            
-                if let img = img {
-                    Section {
-                        img
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 300, height: 300)
-                    }
-                
+            if let img = img {
+                Section {
+                    img
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 300, height: 150)
+                }
             }
-            
             Section {
                 Toggle("Favorite", isOn: $note.favorite)
                     .toggleStyle(SwitchToggleStyle(tint: .blue))
             }
-            
-            if note.reminder != nil {
-                Section {
+            Section {
+                HStack {
+                    Image(systemName: "calendar")
+                    Text("Created at: \(note.created_at.formatted())")
+                }
+                if note.reminder != nil {
                     HStack {
                         Image(systemName: "calendar.badge.clock")
                         Text("Reminder: \(note.reminder!.formatted())")
@@ -120,11 +137,20 @@ struct noteDetailView: View {
                 }
             }
             Section {
-                HStack {
-                    Image(systemName: "calendar")
-                    Text("Created at: \(note.created_at.formatted())")
+                if note.folder != nil {
+                    Text("Folder: \(note.folder!.name)")
+                } else {
+                    Picker("Choose a Folder", selection: $selectedFolderName) {
+                        Text("No Folder").tag("")
+                        ForEach(folders, id: \.self) { folder in
+                            Text(folder.name).tag(folder.name)
+                        }
+                    }
+                    .onChange(of: selectedFolderName) {
+                        handleFolderSelection()
+                    }
+                    .pickerStyle(.menu)
                 }
-                
             }
             
             Section {
@@ -147,6 +173,12 @@ struct noteDetailView: View {
         .navigationTitle(note.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
+            ToolbarItemGroup(placement: .keyboard) {
+                Spacer()
+                Button("Done") {
+                    inputActive = false
+                }
+            }
             if editNote {
                 ToolbarItem(placement: .confirmationAction) {
                     Button("Save") {

@@ -47,8 +47,7 @@ struct addNoteView: View {
         NavigationView {
             Form {
                 Section {
-                    Text("Title:")
-                    TextField("", text: $title)
+                    TextField("Title", text: $title)
                         .foregroundStyle(.secondary)
                         .focused($inputActive)
                         .toolbar {

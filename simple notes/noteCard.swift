@@ -17,25 +17,16 @@ struct noteCard: View {
         
             VStack {
                 HStack {
+                    Image(systemName: "note")
                     Text(note.title)
-                        .font(.title)
                         .foregroundStyle(.primary)
                     Spacer()
                     Image(systemName: note.favorite ? "bookmark.fill" : "bookmark")
                 }
-                
-                Spacer().frame(height: 10)
-                
-                Text(truncatedText(note.note_text, limit: 20))
-                    .font(.callout)
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             .padding(5)
-            
-        
+        }
     }
-}
 
 
 #Preview {
