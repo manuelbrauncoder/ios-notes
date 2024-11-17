@@ -20,7 +20,7 @@ struct photoPickerView: View {
         PhotosPicker(selection: $imgItem, matching: .images) {
             HStack {
                 Image(systemName: "photo")
-                Text("Choose image")
+                Text("Choose Image")
             }
         }
             .onChange(of: imgItem) {

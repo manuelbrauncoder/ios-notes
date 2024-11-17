@@ -71,11 +71,9 @@ struct folderDetailView: View {
                     .sheet(isPresented: $showAddNoteSheet) {
                         addNoteView()
                     }
-
                 }
             }
         }
-        
     }
 }
 

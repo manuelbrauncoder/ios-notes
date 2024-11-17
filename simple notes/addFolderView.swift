@@ -27,8 +27,10 @@ struct addFolderView: View {
     var body: some View {
         NavigationView {
             Form {
-                Section {
+                Section("Name") {
                     TextField("Folder Name", text: $name)
+                }
+                Section("Description") {
                     TextField("Description", text: $description)
                 }
             }
