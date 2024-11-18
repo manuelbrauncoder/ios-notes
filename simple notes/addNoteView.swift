@@ -15,6 +15,7 @@ struct addNoteView: View {
     
     @Query private var folders: [Folder]
     @State private var selectedFolder: Folder?
+    @State private var showAddFolderSheet = false
     
     @State private var title = ""
     @State private var note_text = ""
@@ -70,12 +71,20 @@ struct addNoteView: View {
                         .focused($inputActive)
                 }
                 Section("Folder") {
-                    Picker("Choose a Folder", selection: $selectedFolder) {
-                        ForEach(folders, id: \.self) {
-                            Text($0.name).tag($0)
-                        }
+                    Button("Create new Folder") {
+                        showAddFolderSheet = true
                     }
-                    .pickerStyle(.menu)
+                    .sheet(isPresented: $showAddFolderSheet) {
+                        addFolderView()
+                    }
+                    if !folders.isEmpty {
+                        Picker("Choose a Folder", selection: $selectedFolder) {
+                            ForEach(folders, id: \.self) {
+                                Text($0.name).tag($0)
+                            }
+                        }
+                        .pickerStyle(.menu)
+                    }
                 }
                 Section("Reminder") {
                     Toggle("Reminder?", isOn: $setReminder)

@@ -13,7 +13,7 @@ import SwiftUI
 import SwiftData
 
 
-struct trashView: View {
+struct TrashView: View {
     
     @Query(filter: #Predicate<Note> { note in
         note.trashNote == true
@@ -59,6 +59,6 @@ struct trashView: View {
 
 
 #Preview {
-    trashView()
+    TrashView()
         .modelContainer(for: [Note.self], inMemory: true)
 }

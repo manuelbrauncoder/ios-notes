@@ -13,7 +13,7 @@ struct moreView: View {
         NavigationStack {
             List {
                 NavigationLink {
-                    settingsView()
+                    SettingsView()
                 } label: {
                     Image(systemName: "gearshape.fill")
                     Text("Settings")

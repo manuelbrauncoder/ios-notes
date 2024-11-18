@@ -32,7 +32,6 @@ struct AllNotesView: View {
     var body: some View {
         NavigationStack {
             List {
-                
                 notesList(showOnlyFavs: $showOnlyFavs, sortByTitle: $sortByTitle)
             }
             .overlay {
@@ -47,7 +46,7 @@ struct AllNotesView: View {
             .navigationTitle("Notes")
             .toolbar {
                 ToolbarItemGroup(placement: .bottomBar) {
-                    BottomToolBar()
+                    BottomToolBarButtons()
                 }
             }
         }

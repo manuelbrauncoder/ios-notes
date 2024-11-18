@@ -12,14 +12,14 @@ import UserNotifications
 
 struct ContentView: View {
     
-    @AppStorage("MyTabViewCustomization")
-    private var customization: TabViewCustomization
-    
     @Query var notes: [Note]
     @Query var folders: [Folder]
+    
     @State private var searchTerm = ""
-    @State private var showAddNoteSheet = false
-    @State private var showAddFolderSheet = false
+    
+    //@AppStorage("biometricLogin") private var biometricLogin = false
+    
+    //@State private var biometricAuthentication = BiometricAuthentication()
     
     
     /// Count the notes
@@ -48,77 +48,82 @@ struct ContentView: View {
     
     var body: some View {
         
-        NavigationStack {
-            List {
-                if !searchTerm.isEmpty {
-                    ForEach(filteredNotes) { note in
-                        NavigationLink(destination: noteDetailView(note: note)) {
-                            noteCard(note: note)
+        
+            
+            NavigationStack {
+                List {
+                    if !searchTerm.isEmpty {
+                        ForEach(filteredNotes) { note in
+                            NavigationLink(destination: noteDetailView(note: note)) {
+                                noteCard(note: note)
+                            }
                         }
-                    }
-                } else {
-                    if !folders.isEmpty {
-                        Section("Folders") {
-                            ForEach(folders) { folder in
-                                NavigationLink(destination: folderDetailView(folder: folder)) {
+                        
+                    } else {
+                        if !folders.isEmpty {
+                            Section("Folders") {
+                                ForEach(folders) { folder in
+                                    NavigationLink(destination: FolderDetailView(folder: folder)) {
+                                        HStack {
+                                            Image(systemName: "folder")
+                                                .foregroundStyle(.yellow)
+                                            Text(folder.name)
+                                        }
+                                        .padding(5)
+                                        .badge(folder.notes?.count ?? 0)
+                                    }
+                                }
+                            }
+                            Section("All") {
+                                NavigationLink(destination: AllNotesView()) {
                                     HStack {
                                         Image(systemName: "folder")
                                             .foregroundStyle(.yellow)
-                                        Text(folder.name)
+                                        Text("All Notes")
                                     }
                                     .padding(5)
-                                    .badge(folder.notes?.count ?? 0)
+                                    .badge(notes.count)
                                 }
+                                
                             }
-                        }
-                        Section("All") {
-                            NavigationLink(destination: AllNotesView()) {
-                                HStack {
-                                    Image(systemName: "folder")
-                                        .foregroundStyle(.yellow)
-                                    Text("All Notes")
-                                }
-                                .padding(5)
-                                .badge(notes.count)
-                            }
-                            
                         }
                     }
-                }
-                
-            }
-            .navigationTitle("Folders")
-            .toolbar {
-                ToolbarItemGroup(placement: .bottomBar) {
-                    BottomToolBar()
-                }
-               
-                ToolbarItem(placement: .topBarTrailing) {
-                    Menu(content: {
-                        NavigationLink {
-                            settingsView()
-                        } label: {
-                            Image(systemName: "gearshape.fill")
-                            Text("Settings")
-                        }
-                        NavigationLink {
-                            trashView()
-                        } label: {
-                            Image(systemName: "trash")
-                            Text("Trash")
-                        }
-                        
-                    }, label: {
-                        Image(systemName: "ellipsis.circle")
-                            .foregroundStyle(.yellow)
-                    })
                     
                 }
-                
+                .navigationTitle("Folders")
+                .toolbar {
+                    ToolbarItemGroup(placement: .bottomBar) {
+                        BottomToolBarButtons()
+                    }
+                    
+                    ToolbarItem(placement: .topBarTrailing) {
+                        Menu(content: {
+                            NavigationLink {
+                                SettingsView()
+                            } label: {
+                                Image(systemName: "gearshape.fill")
+                                Text("Settings")
+                            }
+                            NavigationLink {
+                                TrashView()
+                            } label: {
+                                Image(systemName: "trash")
+                                Text("Trash")
+                            }
+                            
+                        }, label: {
+                            Image(systemName: "ellipsis.circle")
+                                .foregroundStyle(.yellow)
+                        })
+                        
+                    }
+                    
+                }
             }
-        }
-        .searchable(text: $searchTerm)
-        
+            .searchable(text: $searchTerm)
+            .tint(.yellow)
+            
+            
         
     }
 }

@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 
-struct BottomToolBar: View {
+struct BottomToolBarButtons: View {
     
     @State private var showAddFolderSheet = false
     @State private var showAddNoteSheet = false
@@ -41,5 +41,5 @@ struct BottomToolBar: View {
 
 
 #Preview {
-    BottomToolBar()
+    BottomToolBarButtons()
 }

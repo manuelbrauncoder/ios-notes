@@ -79,7 +79,7 @@ struct noteDetailView: View {
     }
     
     var body: some View {
-        Form {
+        List {
             if editNote {
                 Section {
                     Text("Title:")
@@ -110,7 +110,7 @@ struct noteDetailView: View {
             }
             Section {
                 Toggle("Favorite", isOn: $note.favorite)
-                    .toggleStyle(SwitchToggleStyle(tint: .blue))
+                    .toggleStyle(SwitchToggleStyle(tint: .yellow))
             }
             Section {
                 HStack {
@@ -173,26 +173,24 @@ struct noteDetailView: View {
         .navigationTitle(note.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItemGroup(placement: .keyboard) {
-                Spacer()
-                Button("Done") {
-                    inputActive = false
-                }
-            }
-            if editNote {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
-                        editNote = false
-                    }
-                }
-            } else {
-                ToolbarItem(placement: .topBarTrailing) {
-                    Button {
+            ToolbarItem(placement: .topBarTrailing) {
+                Menu(content: {
+                    Button(action: {
                         editNote = true
-                    } label: {
-                        Image(systemName: "square.and.pencil")
-                    }
-                }
+                    }, label: {
+                        Text("Edit")
+                        Image(systemName: "pencil")
+                    })
+                    Button(action: {
+                        alertDeleteNote = true
+                    }, label: {
+                        Text("Delete")
+                        Image(systemName: "trash")
+                    })
+                }, label: {
+                    Image(systemName: "ellipsis.circle")
+                        .foregroundStyle(.yellow)
+                })
             }
         }
     }

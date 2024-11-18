@@ -18,6 +18,7 @@ struct noteCard: View {
             VStack {
                 HStack {
                     Image(systemName: "note")
+                        .foregroundStyle(.yellow)
                     Text(note.title)
                         .foregroundStyle(.primary)
                     Spacer()
