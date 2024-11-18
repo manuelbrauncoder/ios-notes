@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 import PhotosUI
 
-struct photoPickerView: View {
+struct PhotoPickerView: View {
     
     @State private var imgItem: PhotosPickerItem?
     @Binding var imgData: Data?

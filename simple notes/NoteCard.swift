@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-struct noteCard: View {
+struct NoteCard: View {
     
     @Bindable var note: Note
     
@@ -32,5 +32,5 @@ struct noteCard: View {
 
 #Preview {
     @Previewable @State var note = Note(title: "note card", note_text: "Create a good looking note card", created_at: Date(), favorite: false)
-    noteCard(note: note)
+    NoteCard(note: note)
 }

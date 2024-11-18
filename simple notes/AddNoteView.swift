@@ -11,7 +11,7 @@ import SwiftUI
 import SwiftData
 import PhotosUI
 
-struct addNoteView: View {
+struct AddNoteView: View {
     
     @Query private var folders: [Folder]
     @State private var selectedFolder: Folder?
@@ -75,7 +75,7 @@ struct addNoteView: View {
                         showAddFolderSheet = true
                     }
                     .sheet(isPresented: $showAddFolderSheet) {
-                        addFolderView()
+                        AddFolderView()
                     }
                     if !folders.isEmpty {
                         Picker("Choose a Folder", selection: $selectedFolder) {
@@ -87,6 +87,7 @@ struct addNoteView: View {
                     }
                 }
                 Section("Reminder") {
+                    
                     Toggle("Reminder?", isOn: $setReminder)
                         .onChange(of: setReminder) {
                             requestNotificationPermission()
@@ -98,8 +99,8 @@ struct addNoteView: View {
                 
                 Section("Image") {
                     
-                    photoPickerView(imgData: $imgData, selectedImage: $selectedImage)
-                    openCameraButton(selectedImage: $selectedImage, imgData: $imgData)
+                    PhotoPickerView(imgData: $imgData, selectedImage: $selectedImage)
+                    OpenCameraButton(selectedImage: $selectedImage, imgData: $imgData)
                     
                     if let selectedImage {
                         Image(uiImage: selectedImage)
@@ -129,6 +130,6 @@ struct addNoteView: View {
 }
 
 #Preview {
-    addNoteView()
+    AddNoteView()
         .modelContainer(for: [Note.self], inMemory: true)
 }

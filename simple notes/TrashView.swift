@@ -6,7 +6,6 @@
 //
 // The Trash Notes View
 //
-// ToDo: Restore Note, Delete Note permanently
 
 import Foundation
 import SwiftUI
@@ -25,7 +24,7 @@ struct TrashView: View {
         NavigationStack {
             List {
                 ForEach(notes) { note in
-                    noteCardTrash(note: note)
+                    NoteCardTrash(note: note)
                         .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                             Button(role: .destructive, action: {
                                 modelContext.delete(note)

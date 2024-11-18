@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 
-struct openCameraButton: View {
+struct OpenCameraButton: View {
     
     @State private var showCamera: Bool = false
     @Binding var selectedImage: UIImage?

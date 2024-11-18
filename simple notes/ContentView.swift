@@ -17,9 +17,9 @@ struct ContentView: View {
     
     @State private var searchTerm = ""
     
-    //@AppStorage("biometricLogin") private var biometricLogin = false
+    @AppStorage("biometricLogin") private var biometricLogin = false
     
-    //@State private var biometricAuthentication = BiometricAuthentication()
+    @State private var biometricAuthentication = BiometricAuthentication()
     
     
     /// Count the notes
@@ -48,17 +48,16 @@ struct ContentView: View {
     
     var body: some View {
         
-        
+        if !biometricLogin || biometricAuthentication.isAuthorized {
             
             NavigationStack {
                 List {
                     if !searchTerm.isEmpty {
                         ForEach(filteredNotes) { note in
-                            NavigationLink(destination: noteDetailView(note: note)) {
-                                noteCard(note: note)
+                            NavigationLink(destination: NoteDetailView(note: note)) {
+                                NoteCard(note: note)
                             }
                         }
-                        
                     } else {
                         if !folders.isEmpty {
                             Section("Folders") {
@@ -84,11 +83,9 @@ struct ContentView: View {
                                     .padding(5)
                                     .badge(notes.count)
                                 }
-                                
                             }
                         }
                     }
-                    
                 }
                 .navigationTitle("Folders")
                 .toolbar {
@@ -115,15 +112,26 @@ struct ContentView: View {
                             Image(systemName: "ellipsis.circle")
                                 .foregroundStyle(.yellow)
                         })
-                        
                     }
-                    
                 }
             }
             .searchable(text: $searchTerm)
             .tint(.yellow)
-            
-            
+        } else {
+            VStack {
+                if let biometricType = biometricAuthentication.getBiometricType() {
+                    Image(systemName: biometricType.getIconName)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 100, height: 100)
+                    Text("Unlock with \(biometricType.getText)")
+                        .font(.title)
+                }
+            }
+            .onAppear {
+                biometricAuthentication.biometricLogin()
+            }
+        }
         
     }
 }

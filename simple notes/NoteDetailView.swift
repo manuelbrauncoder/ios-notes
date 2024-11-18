@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 import SwiftData
 
-struct noteDetailView: View {
+struct NoteDetailView: View {
     
     @Query var folders: [Folder]
     @Bindable var note: Note
@@ -20,11 +20,18 @@ struct noteDetailView: View {
     @State private var alertDeleteNote = false
     @State private var img: Image?
     @State private var selectedFolderName: String? = nil
+    @State private var reminderDate = Date.now
     
     @Environment(\.modelContext) var modelContext
     @Environment(\.dismiss) private var dismiss
     
     @FocusState var inputActive: Bool
+    
+    private func createReminder() {
+        let id = UUID().uuidString
+        scheduleNotification(reminderDate: reminderDate, reminderID: id, title: note.title, body: note.note_text)
+        note.reminder = reminderDate
+    }
     
     
     /// if there is an image in the Note,
@@ -94,29 +101,47 @@ struct noteDetailView: View {
                         .focused($inputActive)
                 }
             } else {
-                Section {
-                    Text(note.title)
-                        .font(.title)
+                Section("Note") {
+                    
                     Text(note.note_text)
                 }
             }
             if let img = img {
-                Section {
+                Section("Image") {
                     img
                         .resizable()
                         .scaledToFit()
                         .frame(width: 300, height: 150)
                 }
             }
-            Section {
+            Section("Favorite") {
                 Toggle("Favorite", isOn: $note.favorite)
                     .toggleStyle(SwitchToggleStyle(tint: .yellow))
             }
-            Section {
+            Section("Folder") {
+                if note.folder != nil {
+                    Text("Folder: \(note.folder!.name)")
+                } else {
+                    Picker("Choose a Folder", selection: $selectedFolderName) {
+                        Text("No Folder").tag("")
+                        ForEach(folders, id: \.self) { folder in
+                            Text(folder.name).tag(folder.name)
+                        }
+                    }
+                    .onChange(of: selectedFolderName) {
+                        handleFolderSelection()
+                    }
+                    .pickerStyle(.menu)
+                }
+            }
+            Section("Created at") {
                 HStack {
                     Image(systemName: "calendar")
                     Text("Created at: \(note.created_at.formatted())")
                 }
+                
+            }
+            Section("Reminder") {
                 if note.reminder != nil {
                     HStack {
                         Image(systemName: "calendar.badge.clock")
@@ -134,37 +159,25 @@ struct noteDetailView: View {
                             alertRemoveReminder = false
                         }
                     }
-                }
-            }
-            Section {
-                if note.folder != nil {
-                    Text("Folder: \(note.folder!.name)")
                 } else {
-                    Picker("Choose a Folder", selection: $selectedFolderName) {
-                        Text("No Folder").tag("")
-                        ForEach(folders, id: \.self) { folder in
-                            Text(folder.name).tag(folder.name)
-                        }
-                    }
-                    .onChange(of: selectedFolderName) {
-                        handleFolderSelection()
-                    }
-                    .pickerStyle(.menu)
+                    DatePicker("Date", selection: $reminderDate)
+                    Button(action: {
+                        createReminder()
+                    }, label: {
+                        Text("Save Reminder")
+                    })
                 }
             }
             
-            Section {
-                Button("Move to Trash", role: .destructive) {
-                    alertDeleteNote = true
-                }
-                .alert("Move to Trash?", isPresented: $alertDeleteNote) {
-                    Button("Delete", role: .destructive) {
-                        deleteNote()
-                    }
-                    Button("Cancel", role: .cancel){
-                        alertDeleteNote = false
-                    }
-                }
+            
+            
+        }
+        .alert("Move to Trash?", isPresented: $alertDeleteNote) {
+            Button("Delete", role: .destructive) {
+                deleteNote()
+            }
+            Button("Cancel", role: .cancel){
+                alertDeleteNote = false
             }
         }
         .onAppear() {
@@ -173,24 +186,33 @@ struct noteDetailView: View {
         .navigationTitle(note.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Menu(content: {
+            ToolbarItemGroup(placement: .topBarTrailing) {
+                if editNote {
                     Button(action: {
-                        editNote = true
+                        editNote = false
                     }, label: {
-                        Text("Edit")
-                        Image(systemName: "pencil")
+                        Text("Save")
                     })
-                    Button(action: {
-                        alertDeleteNote = true
+                } else {
+                    Menu(content: {
+                        Button(action: {
+                            editNote = true
+                        }, label: {
+                            Text("Edit")
+                            Image(systemName: "pencil")
+                        })
+                        Button(action: {
+                            alertDeleteNote = true
+                        }, label: {
+                            Text("Delete")
+                            Image(systemName: "trash")
+                        })
                     }, label: {
-                        Text("Delete")
-                        Image(systemName: "trash")
+                        Image(systemName: "ellipsis.circle")
+                            .foregroundStyle(.yellow)
                     })
-                }, label: {
-                    Image(systemName: "ellipsis.circle")
-                        .foregroundStyle(.yellow)
-                })
+                }
+                
             }
         }
     }
@@ -199,5 +221,5 @@ struct noteDetailView: View {
 
 #Preview {
     @Previewable @State var note = Note(title: "Test Title", note_text: "awesome very much important note text", created_at: Date(), favorite: false, notificationID: "1", reminder: Date())
-    noteDetailView(note: note)
+    NoteDetailView(note: note)
 }

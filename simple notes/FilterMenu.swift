@@ -11,7 +11,7 @@ import Foundation
 import SwiftUI
 
 
-struct filterMenu: View {
+struct FilterMenu: View {
     
     @Binding var showOnlyFavs: Bool
     @Binding var sortByTitle: Bool
@@ -35,6 +35,7 @@ struct filterMenu: View {
             }
         } label: {
             Label("Options", systemImage: "line.3.horizontal.decrease")
+                .tint(.yellow)
         }
     }
 }
@@ -43,6 +44,6 @@ struct filterMenu: View {
 #Preview {
     @Previewable @State var showOnlyFavs = false
     @Previewable @State var sortByTitle = false
-    filterMenu(showOnlyFavs: $showOnlyFavs, sortByTitle: $sortByTitle)
+    FilterMenu(showOnlyFavs: $showOnlyFavs, sortByTitle: $sortByTitle)
 }
 

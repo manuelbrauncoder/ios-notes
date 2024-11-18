@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 import SwiftData
 
-struct notesList: View {
+struct NotesList: View {
     
     @Query(filter: #Predicate<Note> { note in
         note.trashNote == false
@@ -42,8 +42,8 @@ struct notesList: View {
     var body: some View {
         
         ForEach(filteredNotes) { note in
-            NavigationLink(destination: noteDetailView(note: note)) {
-                noteCard(note: note)
+            NavigationLink(destination: NoteDetailView(note: note)) {
+                NoteCard(note: note)
             }
             .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                 

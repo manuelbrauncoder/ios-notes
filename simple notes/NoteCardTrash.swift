@@ -10,7 +10,7 @@ import SwiftUI
 import SwiftData
 
 
-struct noteCardTrash: View {
+struct NoteCardTrash: View {
     
     @Bindable var note: Note
     @Environment(\.modelContext) var modelContext
@@ -40,7 +40,7 @@ struct noteCardTrash: View {
     @Previewable @State var note = Note(title: "trash card", note_text: "Create a good looking note card", created_at: Date(), favorite: false)
     NavigationStack {
         List {
-            noteCardTrash(note: note)
+            NoteCardTrash(note: note)
         }
     }
     

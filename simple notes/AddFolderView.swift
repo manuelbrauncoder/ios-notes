@@ -10,7 +10,7 @@ import SwiftUI
 import SwiftData
 
 
-struct addFolderView: View {
+struct AddFolderView: View {
     
     @State private var name = ""
     @State private var description = ""
@@ -55,6 +55,6 @@ struct addFolderView: View {
 
 
 #Preview {
-    addFolderView()
+    AddFolderView()
         .modelContainer(for: [Folder.self], inMemory: true)
 }

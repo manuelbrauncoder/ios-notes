@@ -23,7 +23,7 @@ struct BottomToolBarButtons: View {
                     .foregroundStyle(.yellow)
             })
             .sheet(isPresented: $showAddFolderSheet) {
-                addFolderView()
+                AddFolderView()
             }
             
             Button(action: {
@@ -33,7 +33,7 @@ struct BottomToolBarButtons: View {
                     .foregroundStyle(.yellow)
             })
             .sheet(isPresented: $showAddNoteSheet) {
-                addNoteView()
+                AddNoteView()
             }
         }
     }

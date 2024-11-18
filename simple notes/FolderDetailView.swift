@@ -54,19 +54,19 @@ struct FolderDetailView: View {
         NavigationStack {
             List {
                 if editFolder {
-                    TextField("Foldername", text: $folderName)
+                    TextField("Foldername", text: $folder.name)
                     TextField("Description", text: $folderDescription)
                     
                 } else {
-                    if folder.folder_description != nil {
+                    if folder.folder_description != "" {
                     Section("Description") {
                             Text(folder.folder_description ?? folder_description_default)
                         }
                     }
                     Section("Notes") {
                         ForEach(filteredNotes()) { note in
-                            NavigationLink(destination: noteDetailView(note: note)) {
-                                noteCard(note: note)
+                            NavigationLink(destination: NoteDetailView(note: note)) {
+                                NoteCard(note: note)
                             }
                             .swipeActions(edge: .trailing, allowsFullSwipe: false) {
                                 Button(role: .destructive, action: {
